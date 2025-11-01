@@ -48,7 +48,6 @@ class ReservaSerializer(serializers.ModelSerializer):
     atendido_por = UsuarioSerializer(read_only=True)
     cliente_username = serializers.CharField(write_only=True, required=False)
     cancha_detalle = CanchaSerializer(source='cancha', read_only=True)
-    monto_total = serializers.SerializerMethodField()
 
     class Meta:
         model = Reserva
@@ -60,10 +59,6 @@ class ReservaSerializer(serializers.ModelSerializer):
             'cliente_username'
         ]
         read_only_fields = ['motivo_anulacion', 'fecha_creacion']
-
-    def get_monto_total(self, obj):
-        return obj.calcular_monto_total
-    
 
     def validate(self, data):
         user = self.context['request'].user
@@ -130,8 +125,8 @@ class ReservaSerializer(serializers.ModelSerializer):
         cancha = validated_data['cancha']
         hora_inicio = validated_data['hora_inicio']
         hora_int = hora_inicio.hour
-        base = cancha.costo_dia if hora_int < 18 else cancha.costo_noche
-        monto_total = base
+        monto_total =  cancha.costo_dia if hora_int < 18 else cancha.costo_noche
+        validated_data['monto_total'] = monto_total
 
         # ---- VALIDACIÓN DE ADELANTO ----
         monto_pagado = validated_data.get('monto_pagado', 0)
