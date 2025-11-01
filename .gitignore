@@ -1,0 +1,22 @@
+# ======================
+# Python / Django
+# ======================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Base de datos local (si usas SQLite)
+db.sqlite3
+
+# Archivos generados por Django
+*.log
+*.pot
+media/
+staticfiles/
+local_settings.py
+
+venv/
+.env/
+.env
